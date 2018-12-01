@@ -47,7 +47,12 @@ Vue.component('poll', {
         </div>
       </div>
       <div class="todayPollContentGraph">
-        <p>content</p>
+        <chart
+          v-if="totalvotes !== 0"
+          v-bind:id="id"
+          v-bind:options="options"
+        >
+        </chart>
       </div>
     </div>
     <br>
@@ -112,8 +117,8 @@ Vue.component('detailPoll', {
         </div>
       </div>
       <div class="todayPollContentGraph">
-
         <chart
+          v-if="totalvotes !== 0"
           v-bind:id="id"
           v-bind:options="options"
         >
@@ -130,17 +135,12 @@ Vue.component('detailPoll', {
 Vue.component('chart', {
   props: {
     id: Number,
-    options: Array
+    options: Array,
   },
   data: function () {
     return {
       chart: {}
     };
-  },
-  computed: {
-    getLabels: function() {
-
-    }
   },
   mounted: function() {
     const myChart = document.getElementById(this.id).getContext('2d');
@@ -162,9 +162,6 @@ Vue.component('chart', {
         colors.push('rgb(255, 153, 51)');
       }
     }
-    //#ff9900;
-    //#0000b3;
-
 
     this.chart = new Chart(myChart, {
       type: 'doughnut',
@@ -194,10 +191,11 @@ Vue.component('chart', {
               });
               const currentValue = dataset.data[tooltipItem.index];
               const percentage = Math.floor(((currentValue/total) * 100)+0.5);
+
               return percentage + "%";
             }
           }
-        }
+}
       }
     });
   },
@@ -316,6 +314,23 @@ const pollContainer = new Vue({
   </div>`
 });
 
-// document.addEventListener("DOMContentLoaded", function() {
-//
-// });
+document.addEventListener("DOMContentLoaded", function() {
+  Chart.pluginService.register({
+    afterDraw: function (chart) {
+      if (chart.data.datasets[0].data.length === 0) {
+        // No data is present
+        const ctx = chart.chart.ctx;
+        const width = chart.chart.width;
+        const height = chart.chart.height
+        chart.clear();
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = "20px normal 'Helvetica Nueue'";
+        ctx.fillText('No data to display', width / 2, height / 2);
+        ctx.restore();
+      }
+    }
+  });
+});
