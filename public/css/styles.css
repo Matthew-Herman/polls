@@ -131,3 +131,8 @@ div {
 .regPollText h5, p {
   margin: 0;
 }
+
+.noStyleLink {
+  color: inherit;
+  text-decoration: inherit;
+}

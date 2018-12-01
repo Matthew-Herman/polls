@@ -35,6 +35,20 @@ app.get('/', function(req, res) {
   return res.render('poll');
 });
 
+app.get('/poll', function(req, res) {
+  if (req.query && !isNaN(req.query.id)) {
+    const pollid = parseInt(req.query.id, 10);
+    for (const poll of polls) {
+      if (poll.id === pollid) {
+        console.log('pollDetailPage');
+        console.log(pollid);
+        return res.render('pollDetailPage', {'pollroute': pollid});
+      }
+    }
+  }
+  return res.status(404).send('404 Cannnot Get ' + req.originalURL);
+});
+
 // Returns poll data in jSON
 // If no query returns all polls
 // If query parameter 'id', returns poll if it is in polls, else 404 response
