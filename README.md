@@ -1,11 +1,13 @@
 To Run:
 
 In terminal:
+```
 cd to an empty directory
 git clone https://github.com/Matthew-Herman/polls.git
 cd to polls
 npm install
 node app.js
+```
 
 In a browser on the computer which is running app.js:
 navigate to "localhost:3000"
