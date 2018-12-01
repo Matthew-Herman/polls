@@ -4,41 +4,42 @@ html, body, div {
 }
 
 div {
+  /* border: 0px;
   border: solid;
-  border-color: black;
+  border-color: black; */
 }
+
+/* Today's Poll Style */
 
 .pollContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.poll {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-width: 325px;
-  max-width: 700px;
+  max-width: 600px;
   padding: 10px;
 }
 
-.pollContent {
+.todayPoll {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.todayPollContent {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.pollContentText {
+.todayPollContentText {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  flex-grow: 1;
   max-width: 400px;
-}
-
-.poll h3, p {
-  padding: 0px 10px 0px 10px;
 }
 
 @media screen and (max-width: 650px){
@@ -47,6 +48,12 @@ div {
     }
 }
 
+
+.todayPollContentGraph {
+  width: 200px;
+  height: 200px;
+  background-color: red;
+}
 
 .buttonContainer {
   display: flex;
@@ -60,7 +67,42 @@ div {
   text-align: center;
 }
 
-.pollContentGraph {
-  width: 200px;
-  height: 200px;
+
+.pollhr {
+  border: 0;
+  width: 100%;
+  border-bottom-style: dashed;
+  border-bottom-width: thin;
+  border-bottom-color: lightgrey;
+}
+
+/* regular Poll Style */
+
+.regPollContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 325px;
+  max-width: 700px;
+  width: 100%;
+}
+
+.regPoll {
+  display: flex;
+  width: 50%;
+}
+
+.regPollGraph {
+  flex-shrink: 0;
+  height: 80px;
+  width: 80px;
+  background-color: red;
+}
+
+.regPollText {
+  flex-grow: 1;
+}
+
+.regPollText h5, p {
+  margin: 0;
 }
