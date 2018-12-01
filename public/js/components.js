@@ -32,33 +32,7 @@ Vue.component('poll', {
     }
   },
   template: `
-  <div v-if="isdetail" class="detailPoll">
-    <div class="detailPollTitle">
-      <h1>{{title}}</h1>
-      <hr class="pollhr">
-      <p style="text-align: right;">{{dateStringDetail}}</p>
-      <br>
-    </div>
-    <div class="todayPollContent detailPollContent">
-      <div class="todayPollContentText">
-
-        <div class="buttonContainer">
-          <div class="button"
-            v-for="(option, index) in options"
-            v-bind:class="{buttonOrange: ((index+1)%2)==1, buttonBlue: ((index+1)%2)==0}"
-          >
-            <a class="noStyleLink" v-bind:href="'/poll?id='+id">{{option.label}}</a>
-          </div>
-        </div>
-      </div>
-      <div class="todayPollContentGraph">
-        <p>content</p>
-      </div>
-    </div>
-    <p class="totalVotes">Total number of votes recorded: {{totalvotes}} </p>
-    <br>
-  </div>
-  <div v-else-if="id == 1 && !isdetail" class="todayPoll">
+  <div v-if="id == 1 && !isdetail" class="todayPoll">
     <h3>Today's Poll</h3>
     <div class="todayPollContent">
       <div class="todayPollContentText">
@@ -89,6 +63,146 @@ Vue.component('poll', {
       <h5><a class="noStyleLink" v-bind:href="'/poll?id='+id">{{title}}</a> </h5>
     </div>
   </div>
+  `
+});
+
+Vue.component('detailPoll', {
+  props: {
+    isdetail: String,
+    id: Number,
+    poll: String,
+    title: String,
+    date: Number,
+    type: String,
+    options: Array,
+    months: Object,
+    days: Object
+  },
+  computed: {
+    dateStringDetail: function() {
+      const dateObj = new Date(this.date*1000);
+      return `${this.days[dateObj.getDay()]}, ${dateObj.getDate()} ${this.months[dateObj.getMonth()]}, ${dateObj.getFullYear()}, ${dateObj.getHours()}:${dateObj.getSeconds()}`;
+    },
+    totalvotes: function() {
+      let sum = 0;
+      for (const option of this.options) {
+        sum += option.votes;
+      }
+      return sum;
+    }
+  },
+  template: `
+  <div v-if="isdetail" class="detailPoll">
+    <div class="detailPollTitle">
+      <h1>{{title}}</h1>
+      <hr class="pollhr">
+      <p style="text-align: right;">{{dateStringDetail}}</p>
+      <br>
+    </div>
+    <div class="todayPollContent detailPollContent">
+      <div class="todayPollContentText">
+
+        <div class="buttonContainer">
+          <div class="button"
+            v-for="(option, index) in options"
+            v-bind:class="{buttonOrange: ((index+1)%2)==1, buttonBlue: ((index+1)%2)==0}"
+          >
+            <a class="noStyleLink" v-bind:href="'/api/vote?id='+id+'&optionid='+option.id">{{option.label}}</a>
+          </div>
+        </div>
+      </div>
+      <div class="todayPollContentGraph">
+
+        <chart
+          v-bind:id="id"
+          v-bind:options="options"
+        >
+        </chart>
+      </div>
+    </div>
+    <p class="totalVotes">Total number of votes recorded: {{totalvotes}} </p>
+    <br>
+  </div>
+  `
+});
+
+
+Vue.component('chart', {
+  props: {
+    id: Number,
+    options: Array
+  },
+  data: function () {
+    return {
+      chart: {}
+    };
+  },
+  computed: {
+    getLabels: function() {
+
+    }
+  },
+  mounted: function() {
+    const myChart = document.getElementById(this.id).getContext('2d');
+    console.log(myChart);
+    // Uses chartjs
+
+    const labels = [];
+    const data = [];
+    const colors = [];
+    for (const option of this.options) {
+      labels.push(option.label);
+      data.push(option.votes);
+    }
+
+    for (let i = 1; i <= data.length; i++) {
+      if (i%2 === 0) {
+        colors.push('rgb(0, 51, 204)');
+      } else {
+        colors.push('rgb(255, 153, 51)');
+      }
+    }
+    //#ff9900;
+    //#0000b3;
+
+
+    this.chart = new Chart(myChart, {
+      type: 'doughnut',
+        // The data for our dataset
+      data: {
+        labels: labels,
+        datasets: [{
+          // label: "My First dataset",
+          backgroundColor: colors,
+          borderColor: 'rgb(255, 255, 255)',
+          data: data,
+        }]
+      },
+      // Configuration options go here
+      options: {
+        cutoutPercentage: 40,
+        rotation: 0.5*Math.PI,
+        legend: {
+          display: false
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              const dataset = data.datasets[tooltipItem.datasetIndex];
+              const total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                return previousValue + currentValue;
+              });
+              const currentValue = dataset.data[tooltipItem.index];
+              const percentage = Math.floor(((currentValue/total) * 100)+0.5);
+              return percentage + "%";
+            }
+          }
+        }
+      }
+    });
+  },
+  template:`
+    <canvas v-bind:id="id"></canvas>
   `
 });
 
@@ -154,17 +268,9 @@ const pollContainer = new Vue({
     }
 
   },
-  created: function() {
-
-  },
-  methods: {
-    vote: function (voteSubmission) {
-
-    }
-  },
   template: `
   <div class="pollContainer">
-    <poll
+    <detailPoll
       v-for="poll in polls"
       v-if="isdetail"
       v-bind:isdetail="isdetail"
@@ -176,9 +282,8 @@ const pollContainer = new Vue({
       v-bind:options="poll.answer.options"
       v-bind:months="months"
       v-bind:days="days"
-      v-on:vote="vote"
     >
-    </poll>
+    </detailPoll>
     <poll
       v-for="poll in polls"
       v-if="poll.id == 1 && !isdetail"
@@ -191,7 +296,6 @@ const pollContainer = new Vue({
       v-bind:options="poll.answer.options"
       v-bind:months="months"
       v-bind:days="days"
-      v-on:vote="vote"
     >
     </poll>
     <div v-if="!isdetail" class="regPollContainer">
@@ -206,7 +310,6 @@ const pollContainer = new Vue({
         v-bind:options="poll.answer.options"
         v-bind:months="months"
         v-bind:days="days"
-        v-on:vote="vote"
       >
       </poll>
     </div>

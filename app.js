@@ -66,6 +66,29 @@ app.get('/api/getpoll', function(req, res) {
   return res.json(polls);
 });
 
+// This should be a post request but for simplciity I didn't implement it that way
+app.get('/api/vote', function(req, res) {
+  // there's no api so for simplicity I'm returing whats in polls
+  if (req.query && !isNaN(req.query.id) && req.query.optionid) {
+    const pollid = parseInt(req.query.id, 10);
+    const optionid = parseInt(req.query.optionid, 10);
+    for (const poll of polls) {
+      if (poll.id === pollid) {
+        const options = poll.answer.options;
+        for (const option of options) {
+          if (option.id === optionid) {
+            option.votes += 1;
+            console.log(poll.answer.options);
+            return res.redirect('/poll?id='+pollid);
+          }
+        }
+      return res.status(404).json({message: 'Poll not found'});
+      }
+    }
+  }
+  return res.status(404).json({message: 'Poll not found'});
+});
+
 app.listen(3000);
 // To run:
 //   cd to scmpPolls
