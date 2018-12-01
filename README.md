@@ -1,8 +1,7 @@
 To Run:
 
-In terminal:
+In terminal, cd to an empty directory:
 ```
-cd to an empty directory
 git clone https://github.com/Matthew-Herman/polls.git
 cd to polls
 npm install
