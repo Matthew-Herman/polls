@@ -1,0 +1,23 @@
+{
+  "name": "polls",
+  "version": "1.0.0",
+  "description": "Assignment for SCMP",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matthew-Herman/polls.git"
+  },
+  "author": "Matthew Herman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Matthew-Herman/polls/issues"
+  },
+  "homepage": "https://github.com/Matthew-Herman/polls#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "hbs": "^4.0.1"
+  }
+}
