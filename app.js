@@ -4,24 +4,12 @@ const path = require('path');
 
 const app = express();
 
-// Assumption:
-// No spec for tracking session or authentication was provided so
-// I store user state, eg. userHasAlreadyVoted, in the clientside state
-// I would expect this to be stored in session on a real website
-
 // Use handlebars for simple templating
 app.set('view engine', 'hbs');
 
 // This will serve files in public statically
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-  For this assignment I will represent the polls as an array in the
-  web server memory. I would expect polls to be in a database and there
-  would be an API for updating polls in the database on the frontend
-
-  Because there is no database, for each poll, I'm adding the number of votes for each option as a property on each option in the poll's "options" array
-*/
 const polls = JSON.parse(fs.readFileSync('./poll.json')).polls;
 
 for (const poll of polls) {
@@ -90,9 +78,3 @@ app.get('/api/vote', function(req, res) {
 });
 
 app.listen(3000);
-// To run:
-//   cd to scmpPolls
-//   npm install
-//   node app.js
-// In a browser on the computer running app.js
-//   navigate to "localhost:3000"
