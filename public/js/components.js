@@ -33,7 +33,8 @@ Vue.component('poll', {
         <h3>{{title}} {{dateString}}</h3>
         <div class="buttonContainer">
           <div class="button"
-            v-for="option in options"
+            v-for="(option, index) in options"
+            v-bind:class="{buttonOrange: ((index+1)%2)==1, buttonBlue: ((index+1)%2)==0}"
           >
             {{option.label}}
           </div>
@@ -43,8 +44,10 @@ Vue.component('poll', {
         <p>content</p>
       </div>
     </div>
+    <br>
     <p class="totalVotes">Total number of votes recorded: {{totalvotes}} </p>
-      <hr class="pollhr">
+    <hr class="pollhr">
+    <br>
   </div>
   <div v-else class="regPoll">
     <div class="regPollGraph">

@@ -25,7 +25,7 @@ div {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  background-color: lightgrey;
+  background-color: #e6e6e6;
 }
 
 .todayPoll > h3, p {
@@ -37,6 +37,7 @@ div {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
 .todayPollContentText {
@@ -72,13 +73,26 @@ div {
   text-align: center;
   background-color: gray;
   margin-top: 5px;
-  padding: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  color: white;
+}
+
+.buttonOrange {
+  background-color: #ff9900;
+}
+
+.buttonBlue {
+  background-color: #0000b3;
 }
 
 
 .pollhr {
   border: 0;
-  width: 100%;
+  width: 95%;
   border-bottom-style: dashed;
   border-bottom-width: thin;
   border-bottom-color: lightgrey;
@@ -104,7 +118,9 @@ div {
   flex-shrink: 0;
   height: 80px;
   width: 80px;
-  background-color: red;
+  background-image: url("../img/graphPic.png");
+  background-size: cover;
+  background-position: center;
 }
 
 .regPollText {
