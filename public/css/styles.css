@@ -44,11 +44,13 @@ div {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-self: flex-start;
   flex-grow: 1;
+  min-width:300px;
   max-width: 400px;
 }
 
-@media screen and (max-width: 650px){
+@media screen and (max-width: 450px){
     .totalVotes{
         align-self: center;
     }
@@ -96,6 +98,8 @@ div {
   border-bottom-style: dashed;
   border-bottom-width: thin;
   border-bottom-color: lightgrey;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 /* regular Poll Style */
@@ -112,6 +116,12 @@ div {
 .regPoll {
   display: flex;
   width: 50%;
+}
+
+@media screen and (max-width: 450px){
+    .regPoll {
+      width: 100%;
+    }
 }
 
 .regPollGraph {
@@ -135,4 +145,28 @@ div {
 .noStyleLink {
   color: inherit;
   text-decoration: inherit;
+}
+
+/* Detail Poll style */
+
+.detailPoll {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  background-color: #e6e6e6;
+  margin: 10px;
+  background-color: lightblue;
+}
+
+.detailPollTitle {
+  background-color: white;
+}
+
+.detailPollContent {
+  margin-top: 20px;
+}
+
+.mobile {
+
 }

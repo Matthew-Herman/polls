@@ -11,9 +11,14 @@ Vue.component('poll', {
     date: Number,
     type: String,
     options: Array,
-    months: Object
+    months: Object,
+    days: Object
   },
   computed: {
+    dateStringDetail: function() {
+      const dateObj = new Date(this.date*1000);
+      return `${this.days[dateObj.getDay()]}, ${dateObj.getDate()} ${this.months[dateObj.getMonth()]}, ${dateObj.getFullYear()}, ${dateObj.getHours()}:${dateObj.getSeconds()}`;
+    },
     dateString: function() {
       const dateObj = new Date(this.date*1000);
       return `${dateObj.getDate()} ${this.months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
@@ -27,7 +32,33 @@ Vue.component('poll', {
     }
   },
   template: `
-  <div v-if="id == 1 && !isdetail" class="todayPoll">
+  <div v-if="isdetail" class="detailPoll">
+    <div class="detailPollTitle">
+      <h1>{{title}}</h1>
+      <hr class="pollhr">
+      <p style="text-align: right;">{{dateStringDetail}}</p>
+      <br>
+    </div>
+    <div class="todayPollContent detailPollContent">
+      <div class="todayPollContentText">
+
+        <div class="buttonContainer">
+          <div class="button"
+            v-for="(option, index) in options"
+            v-bind:class="{buttonOrange: ((index+1)%2)==1, buttonBlue: ((index+1)%2)==0}"
+          >
+            <a class="noStyleLink" v-bind:href="'/poll?id='+id">{{option.label}}</a>
+          </div>
+        </div>
+      </div>
+      <div class="todayPollContentGraph">
+        <p>content</p>
+      </div>
+    </div>
+    <p class="totalVotes">Total number of votes recorded: {{totalvotes}} </p>
+    <br>
+  </div>
+  <div v-else-if="id == 1 && !isdetail" class="todayPoll">
     <h3>Today's Poll</h3>
     <div class="todayPollContent">
       <div class="todayPollContentText">
@@ -50,7 +81,7 @@ Vue.component('poll', {
     <hr class="pollhr">
     <br>
   </div>
-  <div v-if="!isdetail" v-else class="regPoll">
+  <div v-else-if="!isdetail" v-else class="regPoll">
     <div class="regPollGraph">
     </div>
     <div class="regPollText">
@@ -68,18 +99,27 @@ const pollContainer = new Vue({
     polls: [],
     error: false,
     months: {
-      '0': 'JAN',
-      '1': 'FEB',
-      '2': 'MAR',
-      '3': 'APR',
-      '4': 'MAY',
-      '5': 'JUN',
-      '6': 'JUL',
-      '7': 'AUG',
-      '8': 'SEP',
-      '9': 'OCT',
-      '10': 'NOV',
-      '11': 'DEC'
+      '0': 'Jan',
+      '1': 'Feb',
+      '2': 'Mar',
+      '3': 'Apr',
+      '4': 'May',
+      '5': 'Jun',
+      '6': 'Jul',
+      '7': 'Aaug',
+      '8': 'Sep',
+      '9': 'Oct',
+      '10': 'Nov',
+      '11': 'Dec'
+    },
+    days: {
+      '0': 'Monday',
+      '1': 'Tuesday',
+      '2': 'Wednesday',
+      '3': 'Thursday',
+      '4': 'Friday',
+      '5': 'Saturday',
+      '6': 'Sunday'
     }
   },
   beforeMount: function() {
@@ -135,6 +175,7 @@ const pollContainer = new Vue({
       v-bind:type="poll.answer.type"
       v-bind:options="poll.answer.options"
       v-bind:months="months"
+      v-bind:days="days"
       v-on:vote="vote"
     >
     </poll>
@@ -149,6 +190,7 @@ const pollContainer = new Vue({
       v-bind:type="poll.answer.type"
       v-bind:options="poll.answer.options"
       v-bind:months="months"
+      v-bind:days="days"
       v-on:vote="vote"
     >
     </poll>
@@ -156,7 +198,6 @@ const pollContainer = new Vue({
       <poll
         v-for="poll in polls"
         v-if="poll.id > 1 && !isdetail"
-        v-bind:isdetail="isdetail"
         v-bind:key="poll.id"
         v-bind:id="poll.id"
         v-bind:title="poll.title"
@@ -164,6 +205,7 @@ const pollContainer = new Vue({
         v-bind:type="poll.answer.type"
         v-bind:options="poll.answer.options"
         v-bind:months="months"
+        v-bind:days="days"
         v-on:vote="vote"
       >
       </poll>
