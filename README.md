@@ -17,6 +17,8 @@ Because there is no database, for each poll, I add the number of votes for each 
 
 No spec for tracking session or authentication was provided so I am not properly tracking state, eg. userHasAlreadyVoted, in the clientside state. I would expect this to be stored in session on a real website. Also as there is no system for handling errors I just store state on the Vue component and there is no rendering depending on errors from AJAX calls.
 
+I oversimplified the AJAX calls for the voting as there is no API.
 
+I just used the compiled production vue. I didn't want to complicate this project by building vue or using a CSS preprocessor, so I wrote components and css in the same file for simplicity. On a larger project I would expect to components to be in single file components and a more complex routing system.
 
-I oversimplified the AJAX calls for the voting.
+Given more time I would also create child components for "detailPost" instead of reusing the components for "todayPost".
